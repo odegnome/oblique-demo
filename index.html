@@ -1,111 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
+    <title>Trading Platform</title>
     <link rel="stylesheet" href="css/styles.css">
-    <style>
-        /* Additional styling for the form layout */
-        .form-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            flex: 1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .token-row {
-            margin-bottom: 15px;
-        }
-
-        .token-row label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .button-row {
-            margin-top: 20px;
-        }
-
-        /* Orderbook styling */
-        .orderbook {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .orderbook-half {
-            width: 48%;
-        }
-
-        .orderbook-title {
-            text-align: center;
-            font-weight: bold;
-            padding: 5px;
-            background-color: #f0f0f0;
-            border-radius: 4px 4px 0 0;
-        }
-
-        .orderbook-bids .orderbook-title {
-            color: #008000; /* Green color for bids */
-        }
-
-        .orderbook-asks .orderbook-title {
-            color: #d32f2f; /* Red color for asks */
-        }
-
-        .orderbook-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .orderbook-table th, .orderbook-table td {
-            padding: 6px;
-            text-align: right;
-        }
-
-        .orderbook-table th {
-            background-color: #f5f5f5;
-            font-weight: normal;
-            color: #666;
-            font-size: 12px;
-        }
-
-        .orderbook-bids td:first-child {
-            color: #008000; /* Green color for bid prices */
-        }
-
-        .orderbook-asks td:first-child {
-            color: #d32f2f; /* Red color for ask prices */
-        }
-
-        .spread-row {
-            display: flex;
-            justify-content: center;
-            padding: 5px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            font-size: 13px;
-            margin: 0;
-        }
-    </style>
+    <!-- You can include the improved CSS here or link to an external file -->
 </head>
+
 <body>
     <header>
-        <h1>Welcome to My Website</h1>
-        <!-- <p>A simple webpage with two equal boxes</p> -->
+        <h1>Trading Platform</h1>
     </header>
 
     <div class="container">
@@ -160,7 +66,8 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1" step="1">
+                    <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1"
+                        step="1">
                 </div>
 
                 <div class="form-group">
@@ -182,8 +89,8 @@
                 <div class="form-group">
                     <label for="direction">Direction:</label>
                     <select id="direction" class="input-field">
-                        <option value="ask">Ask</option>
-                        <option value="bid">Bid</option>
+                        <option value="ask">Ask (Sell)</option>
+                        <option value="bid">Bid (Buy)</option>
                     </select>
                 </div>
             </div>
@@ -194,33 +101,43 @@
                 <select id="token" class="input-field">
                     <option value="atom">ATOM</option>
                     <option value="om">OM</option>
+                    <option value="btc">BTC</option>
+                    <option value="eth">ETH</option>
                 </select>
             </div>
 
             <!-- Button Row -->
             <div class="button-row">
-                <button class="button">Send</button>
+                <button class="button">Place Order</button>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 My Website</p>
+        <p>&copy; 2025 Trading Platform - All rights reserved</p>
     </footer>
 
     <script>
         // Sample data from API
-        const orderData = {
+        let orderData = {
             "data": {
                 "bids": [
-                    ["5.3", 1, "5000000"]
+                    ["5.30", 1, "5000000"],
+                    ["5.29", 2, "3500000"],
+                    ["5.28", 1, "2800000"],
+                    ["5.27", 3, "7500000"],
+                    ["5.26", 2, "4200000"]
                 ],
                 "asks": [
-                    ["5.4", 1, "10000000"]
+                    ["5.40", 1, "10000000"],
+                    ["5.41", 2, "8500000"],
+                    ["5.42", 1, "3200000"],
+                    ["5.43", 2, "6700000"],
+                    ["5.44", 3, "9100000"]
                 ],
-                "highest_buy": "5.3",
-                "lowest_sell": "5.4",
-                "spread": "0.1"
+                "highest_buy": "5.30",
+                "lowest_sell": "5.40",
+                "spread": "0.10"
             }
         };
 
@@ -261,7 +178,7 @@
         }
 
         // Populate on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             populateOrderbook(orderData);
 
             // In a real application, you would fetch data from API at intervals
@@ -275,4 +192,5 @@
         });
     </script>
 </body>
+
 </html>
