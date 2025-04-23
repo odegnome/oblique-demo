@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Additional styling for the form layout */
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .token-row {
+            margin-bottom: 15px;
+        }
+
+        .token-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .button-row {
+            margin-top: 20px;
+        }
+
+        /* Orderbook styling */
+        .orderbook {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .orderbook-half {
+            width: 48%;
+        }
+
+        .orderbook-title {
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .orderbook-bids .orderbook-title {
+            color: #008000; /* Green color for bids */
+        }
+
+        .orderbook-asks .orderbook-title {
+            color: #d32f2f; /* Red color for asks */
+        }
+
+        .orderbook-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .orderbook-table th, .orderbook-table td {
+            padding: 6px;
+            text-align: right;
+        }
+
+        .orderbook-table th {
+            background-color: #f5f5f5;
+            font-weight: normal;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .orderbook-bids td:first-child {
+            color: #008000; /* Green color for bid prices */
+        }
+
+        .orderbook-asks td:first-child {
+            color: #d32f2f; /* Red color for ask prices */
+        }
+
+        .spread-row {
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Website</h1>
+        <!-- <p>A simple webpage with two equal boxes</p> -->
+    </header>
+
+    <div class="container">
+        <!-- Left Box - Orderbook -->
+        <div class="box">
+            <h2>Orderbook</h2>
+
+            <div class="orderbook">
+                <!-- Bids section -->
+                <div class="orderbook-half orderbook-bids">
+                    <div class="orderbook-title">Bids</div>
+                    <table class="orderbook-table">
+                        <thead>
+                            <tr>
+                                <th>Price</th>
+                                <th>Orders</th>
+                                <th>Volume</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bids-body">
+                            <!-- Bids will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Asks section -->
+                <div class="orderbook-half orderbook-asks">
+                    <div class="orderbook-title">Asks</div>
+                    <table class="orderbook-table">
+                        <thead>
+                            <tr>
+                                <th>Price</th>
+                                <th>Orders</th>
+                                <th>Volume</th>
+                            </tr>
+                        </thead>
+                        <tbody id="asks-body">
+                            <!-- Asks will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p class="spread-row">Spread: <span id="spread-value">0.1</span></p>
+        </div>
+
+        <!-- Right Box - Trade Form -->
+        <div class="box">
+            <h2>Trade Form</h2>
+
+            <!-- Row 1: Quantity & Price -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1" step="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" class="input-field" placeholder="Enter price" min="0" step="0.01">
+                </div>
+            </div>
+
+            <!-- Row 2: Order Type & Direction -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="orderType">Order Type:</label>
+                    <select id="orderType" class="input-field">
+                        <option value="limit">Limit</option>
+                        <option value="market">Market</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="direction">Direction:</label>
+                    <select id="direction" class="input-field">
+                        <option value="ask">Ask</option>
+                        <option value="bid">Bid</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 3: Token -->
+            <div class="token-row">
+                <label for="token">Token:</label>
+                <select id="token" class="input-field">
+                    <option value="atom">ATOM</option>
+                    <option value="om">OM</option>
+                </select>
+            </div>
+
+            <!-- Button Row -->
+            <div class="button-row">
+                <button class="button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 My Website</p>
+    </footer>
+
+    <script>
+        // Sample data from API
+        const orderData = {
+            "data": {
+                "bids": [
+                    ["5.3", 1, "5000000"]
+                ],
+                "asks": [
+                    ["5.4", 1, "10000000"]
+                ],
+                "highest_buy": "5.3",
+                "lowest_sell": "5.4",
+                "spread": "0.1"
+            }
+        };
+
+        // Function to populate the orderbook
+        function populateOrderbook(data) {
+            const bidsBody = document.getElementById('bids-body');
+            const asksBody = document.getElementById('asks-body');
+            const spreadValue = document.getElementById('spread-value');
+
+            // Clear existing data
+            bidsBody.innerHTML = '';
+            asksBody.innerHTML = '';
+
+            // Populate bids
+            data.data.bids.forEach(bid => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${parseFloat(bid[0]).toFixed(2)}</td>
+                    <td>${bid[1]}</td>
+                    <td>${parseInt(bid[2]).toLocaleString()}</td>
+                `;
+                bidsBody.appendChild(row);
+            });
+
+            // Populate asks
+            data.data.asks.forEach(ask => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${parseFloat(ask[0]).toFixed(2)}</td>
+                    <td>${ask[1]}</td>
+                    <td>${parseInt(ask[2]).toLocaleString()}</td>
+                `;
+                asksBody.appendChild(row);
+            });
+
+            // Update spread
+            spreadValue.textContent = data.data.spread;
+        }
+
+        // Populate on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateOrderbook(orderData);
+
+            // In a real application, you would fetch data from API at intervals
+            // Example:
+            // setInterval(() => {
+            //     fetch('your-api-endpoint')
+            //         .then(response => response.json())
+            //         .then(data => populateOrderbook(data))
+            //         .catch(error => console.error('Error fetching orderbook:', error));
+            // }, 5000); // Update every 5 seconds
+        });
+    </script>
+</body>
+</html>
