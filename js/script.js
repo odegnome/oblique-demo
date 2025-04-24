@@ -1,4 +1,3 @@
-
 // Make orderData a global variable accessible to all functions
 let orderData = {
     "data": {
