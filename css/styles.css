@@ -1,82 +1,351 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Open Sans', sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    color: #333;
+    min-height: 100vh;
 }
 
-header, footer {
+header,
+footer {
     text-align: center;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 20px 0;
 }
 
-/* Clear and simple container styling */
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+/* Container styling */
 .container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 30px auto;
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 25px;
+    padding: 0 20px;
 }
 
-/* Force boxes to be equal width */
+/* Box styling with improved aesthetics */
 .box {
     width: 50%;
-    border: 2px solid #333;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 12px;
+    padding: 25px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     box-sizing: border-box;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 .box h2 {
     margin-top: 0;
-    color: #444;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    color: #2c3e50;
+    border-bottom: 2px solid #e7eaf0;
+    padding-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
+/* Button styling */
 .button {
     background-color: #4CAF50;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
-    margin: 5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
     background-color: #45a049;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
 }
 
-.button.secondary {
-    background-color: #2196F3;
+.button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
-.button.secondary:hover {
-    background-color: #0b7dda;
-}
-
+/* Input fields styling */
 .input-field {
     width: 100%;
-    padding: 8px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #dde1e7;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border 0.2s, box-shadow 0.2s;
+    background-color: #f8f9fa;
 }
 
-/* Only stack on very small screens */
-@media (max-width: 600px) {
+.input-field:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Form styling */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #546e7a;
+    font-size: 0.95rem;
+}
+
+.token-row {
+    margin-bottom: 20px;
+}
+
+.token-row label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #546e7a;
+    font-size: 0.95rem;
+}
+
+.button-row {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Orderbook styling */
+.orderbook {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 15px;
+}
+
+.orderbook-half {
+    width: 48%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.orderbook-title {
+    text-align: center;
+    font-weight: 600;
+    padding: 10px;
+    background-color: #f6f8fa;
+    border-radius: 8px 8px 0 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.orderbook-bids .orderbook-title {
+    color: #2e7d32;
+    background-color: rgba(46, 125, 50, 0.08);
+}
+
+.orderbook-asks .orderbook-title {
+    color: #c62828;
+    background-color: rgba(198, 40, 40, 0.08);
+}
+
+.orderbook-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background-color: #ffffff;
+}
+
+.orderbook-table th,
+.orderbook-table td {
+    padding: 10px;
+    text-align: right;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.orderbook-table th {
+    background-color: #f9f9f9;
+    font-weight: 500;
+    color: #78909c;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.orderbook-bids td:first-child {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.orderbook-asks td:first-child {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.spread-row {
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    background-color: #f5f7fa;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+    color: #455a64;
+}
+
+#spread-value {
+    margin-left: 5px;
+    font-weight: 700;
+    color: #546e7a;
+}
+
+/* Select styling */
+select.input-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23546e7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Footer styling */
+footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    color: #78909c;
+    border-top: 1px solid #e7eaf0;
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
     .container {
         flex-direction: column;
+        padding: 0 15px;
     }
 
     .box {
         width: 100%;
+        margin-bottom: 20px;
     }
+
+    .form-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* Add some subtle animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.box {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.box:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+/* Animation for highlighting updated rows */
+@keyframes highlightRow {
+    0% {
+        background-color: rgba(255, 236, 179, 0.7);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.highlight-update {
+    animation: highlightRow 2s ease-out;
+}
+
+/* Updated orderbook row hover style for better user feedback */
+.orderbook-table tbody tr:hover {
+    background-color: rgba(236, 246, 252, 0.8);
+    cursor: pointer;
+}
+
+/* Highlight animation for new rows */
+@keyframes highlight {
+    0% {
+        background-color: rgba(255, 255, 0, 0.3);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* Apply to all rows when orderbook updates */
+#bids-body tr,
+#asks-body tr {
+    animation: highlight 1.5s ease-out;
+}
+
+/* Improve row appearance */
+.orderbook-table tr:hover {
+    background-color: rgba(230, 240, 250, 0.5);
+}
+
+/* Make the send button more noticeable */
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
