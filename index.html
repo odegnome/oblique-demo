@@ -21,6 +21,8 @@
         <div class="box">
             <h2>Orderbook</h2>
 
+            <p class="spread-row">Spread: <span id="spread-value">0.1</span></p>
+
             <div class="orderbook">
                 <!-- Bids section -->
                 <div class="orderbook-half orderbook-bids">
@@ -56,8 +58,6 @@
                     </table>
                 </div>
             </div>
-
-            <p class="spread-row">Spread: <span id="spread-value">0.1</span></p>
         </div>
 
         <!-- Right Box - Trade Form -->
@@ -69,12 +69,12 @@
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
                     <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1"
-                        step="1">
+                        step="1", style="width: 90%;">
                 </div>
 
                 <div class="form-group">
                     <label for="price">Price:</label>
-                    <input type="number" id="price" class="input-field" placeholder="Enter price" min="0" step="0.01">
+                    <input type="number" id="price" class="input-field" placeholder="Enter price" min="0" step="0.01", style="width: 90%;">
                 </div>
             </div>
 
