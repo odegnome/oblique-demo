@@ -36,7 +36,7 @@ header h1 {
 /* Wallet-section styling */
 .wallet-section {
     width: 100%;
-    max-width: 1200px;
+    max-width: 200px;
     margin: 30px auto;
     display: flex;
     flex-direction: column;
