@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@cosmjs/crypto": "^0.33.1",
+    "@cosmjs/encoding": "^0.33.1",
+    "@cosmjs/proto-signing": "^0.33.1",
+    "@cosmjs/stargate": "^0.33.1",
+    "@cosmjs/cosmwasm-stargate": "^0.33.1"
+  },
+  "name": "oblique-demo",
+  "version": "0.0.1",
+  "main": "js/script.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "vite": "^6.3.3"
+  }
+}

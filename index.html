@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trading Platform</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico">
     <!-- You can include the improved CSS here or link to an external file -->
-    <script src="/js/script.js"></script>
-
+    <!-- <script type="module" src="/js/script.js"></script> -->
 </head>
 
 <body>
+    <script type="module" src="/main.js"></script>
     <header>
-        <h1>Trading Platform</h1>
+        <h1>Oblique: Market for RWA</h1>
     </header>
 
     <div class="container">
@@ -68,13 +69,14 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1"
-                        step="1", style="width: 90%;">
+                    <input type="number" id="quantity" class="input-field" placeholder="Enter quantity" min="1" step="1"
+                        , style="width: 90%;">
                 </div>
 
                 <div class="form-group">
                     <label for="price">Price:</label>
-                    <input type="number" id="price" class="input-field" placeholder="Enter price" min="0" step="0.01", style="width: 90%;">
+                    <input type="number" id="price" class="input-field" placeholder="Enter price" min="0" step="0.01" ,
+                        style="width: 90%;">
                 </div>
             </div>
 
@@ -115,84 +117,24 @@
         </div>
     </div>
 
+    <!-- Wallet Generation Section -->
+    <div class="container">
+        <div class="wallet-section">
+            <h3>Wallet Management</h3>
+            <button id="generate-wallet" class="button">Generate Wallet</button>
+            <div id="wallet-balance" style="min-width: 10%;">
+                <div class="wallet-label">Balance:</div>
+                <div id="balance-amount">0.00</div>
+            </div>
+        </div>
+        <div id="wallet-result" class="wallet-display">
+            <!-- Wallet address and mnemonic will be displayed here -->
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2025 Trading Platform - All rights reserved</p>
     </footer>
-
-    <!-- <script>
-        // Sample data from API
-        let orderData = {
-            "data": {
-                "bids": [
-                    ["5.30", 1, "5000000"],
-                    ["5.29", 2, "3500000"],
-                    ["5.28", 1, "2800000"],
-                    ["5.27", 3, "7500000"],
-                    ["5.26", 2, "4200000"]
-                ],
-                "asks": [
-                    ["5.40", 1, "10000000"],
-                    ["5.41", 2, "8500000"],
-                    ["5.42", 1, "3200000"],
-                    ["5.43", 2, "6700000"],
-                    ["5.44", 3, "9100000"]
-                ],
-                "highest_buy": "5.30",
-                "lowest_sell": "5.40",
-                "spread": "0.10"
-            }
-        };
-
-        // Function to populate the orderbook
-        function populateOrderbook(data) {
-            const bidsBody = document.getElementById('bids-body');
-            const asksBody = document.getElementById('asks-body');
-            const spreadValue = document.getElementById('spread-value');
-
-            // Clear existing data
-            bidsBody.innerHTML = '';
-            asksBody.innerHTML = '';
-
-            // Populate bids
-            data.data.bids.forEach(bid => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${parseFloat(bid[0]).toFixed(2)}</td>
-                    <td>${bid[1]}</td>
-                    <td>${parseInt(bid[2]).toLocaleString()}</td>
-                `;
-                bidsBody.appendChild(row);
-            });
-
-            // Populate asks
-            data.data.asks.forEach(ask => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${parseFloat(ask[0]).toFixed(2)}</td>
-                    <td>${ask[1]}</td>
-                    <td>${parseInt(ask[2]).toLocaleString()}</td>
-                `;
-                asksBody.appendChild(row);
-            });
-
-            // Update spread
-            spreadValue.textContent = data.data.spread;
-        }
-
-        // Populate on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            populateOrderbook(orderData);
-
-            // In a real application, you would fetch data from API at intervals
-            // Example:
-            // setInterval(() => {
-            //     fetch('your-api-endpoint')
-            //         .then(response => response.json())
-            //         .then(data => populateOrderbook(data))
-            //         .catch(error => console.error('Error fetching orderbook:', error));
-            // }, 5000); // Update every 5 seconds
-        });
-    </script> -->
 </body>
 
 </html>
