@@ -1,7 +1,5 @@
-import { StargateClient } from "@cosmjs/cosmwasm-stargate";
+import { StargateClient } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-// import { stringToPath } from "@cosmjs/crypto";
 
 const rpc = "http://localhost:26657"
 // const rpc = "https://rpc.dukong.mantrachain.io"
@@ -47,7 +45,7 @@ function populateOrderbook(data) {
         row.innerHTML = `
             <td>${parseFloat(bid[0]).toFixed(2)}</td>
             <td>${bid[1]}</td>
-            <td>${parseInt(bid[2]).toLocaleString()}</td>
+            <td>${(parseInt(bid[2])/10**6).toFixed(2)}</td>
         `;
         bidsBody.appendChild(row);
     });
@@ -58,7 +56,7 @@ function populateOrderbook(data) {
         row.innerHTML = `
             <td>${parseFloat(ask[0]).toFixed(2)}</td>
             <td>${ask[1]}</td>
-            <td>${parseInt(ask[2]).toLocaleString()}</td>
+            <td>${(parseInt(ask[2])/10**6).toFixed(2)}</td>
         `;
         asksBody.appendChild(row);
     });
@@ -130,11 +128,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 try {
                     const result = await main();
-                    const balance = await fetchBalance(result.address)
-                    if (balance.length == 0) {
-                        balanceAmount.textContent = "0.00"
+                    const balances = await fetchBalance(result.address)
+                    if (balances.length == 0) {
+                        balanceAmount.textContent = "NA"
                     } else {
-                        balanceAmount.textContent = ((Number(balance[0].amount).toFixed(2)) / 10 ** 6).toString() + balance[0].denom // 100USDC
+                        balanceAmount.innerHTML = balances.map(coin => {
+                            // Format each balance: convert from micro units and clean up the denom
+                            const amount = (Number(coin.amount) / 10 ** 6).toFixed(6);
+                            const denom = coin.denom.startsWith('u') ? coin.denom.substring(1).toUpperCase() : coin.denom;
+                            return `${amount} ${denom}`;
+                        }).join('<br>');
                     }
                     resultDiv.innerHTML = `
                         <p><strong>Generated Address:</strong> ${result.address}</p>
@@ -151,30 +154,82 @@ document.addEventListener('DOMContentLoaded', function() {
     // Place Order button click handler
     const orderButton = document.querySelector('.button-row .button');
     if (orderButton) {
-        orderButton.addEventListener('click', function() {
-            const quantity = document.getElementById('quantity').value;
-            const price = document.getElementById('price').value;
-            const orderType = document.getElementById('orderType').value;
-            const direction = document.getElementById('direction').value;
-            const token = document.getElementById('token').value;
+        orderButton.addEventListener('click', async function() {
+            try {
+                const quantity = document.getElementById('quantity').value;
+                const price = document.getElementById('price').value;
+                const orderType = document.getElementById('orderType').value; // 'limit' or 'market'
+                const direction = document.getElementById('direction').value; // 'buy' or 'sell'
+                const token = document.getElementById('token').value; // The token symbol
 
-            // Validate inputs
-            if (!quantity || !price || (orderType === 'limit' && !price)) {
-                alert('Please fill out all required fields');
-                return;
+                console.log(orderType, "orderType");
+                console.log(direction, "direction");
+
+                // Validate inputs
+                if (!quantity || (orderType === 'limit' && !price)) {
+                    alert('Please fill out all required fields');
+                    return;
+                }
+
+                // Show loading state
+                this.disabled = true;
+                this.innerHTML = 'Processing...';
+
+                // Convert form values to contract parameters
+                // Map 'buy' to 'bid' and 'sell' to 'ask' for the category parameter
+                const category = direction === 'bid' ? 'bid' : 'ask';
+                // Use token as asset, ensure it has 'u' prefix if needed
+                const asset = token.startsWith('u') ? token : `u${token.toLowerCase()}`;
+                // Format quantity (convert to appropriate units if needed)
+                const formattedQuantity = quantity * 1000000 + ''; // Convert to microtokens and to string
+
+                // Generate a wallet if not already available
+                let wallet_result = await main();
+                let currentWallet = wallet_result.wallet;
+                // if (localStorage.getItem("wallet")) {
+                //     currentWallet = gene
+                // } else {
+                //     const { wallet } = await generateKey();
+                //     window.currentWallet = wallet;
+                //     currentWallet = wallet;
+                // }
+
+                console.log('Preparing to submit order with the following parameters:');
+                console.log({
+                    quantity: formattedQuantity,
+                    asset: asset,
+                    category: category,
+                    limit: price,
+                    execution: orderType
+                });
+
+                // Send the transaction to the blockchain
+                const result = await placeOrder(
+                    currentWallet,
+                    formattedQuantity,
+                    asset,
+                    category,
+                    price,
+                    orderType
+                );
+
+                console.log('Transaction successful:', result);
+
+                // Show success message
+                alert(`Order successfully placed! Transaction hash: ${result.transactionHash}`);
+
+                // Reset form
+                document.getElementById('quantity').value = '';
+                document.getElementById('price').value = '';
+
+            } catch (error) {
+                console.error('Error processing order:', error);
+                alert(`Failed to place order: ${error.message}`);
+            } finally {
+                // Reset button state
+                this.disabled = false;
+                this.innerHTML = 'Place Order';
             }
-
-            // In a real application, this would call a function to execute the order
-            console.log('Order submitted:', {
-                quantity,
-                price,
-                orderType,
-                direction,
-                token
-            });
-
-            // For demonstration purposes
-            alert(`Order submitted: ${direction} ${quantity} ${token} at ${price} (${orderType})`);
         });
     }
 
@@ -240,8 +295,6 @@ async function main() {
         const wallet = await getKey(old_wallet?.secret?.data);
         const accounts = await wallet.getAccounts();
         const address = accounts[0].address;
-        console.log(wallet, "wallet 3");
-        console.log(address, "address 3");
 
         return { wallet, address };
     } catch (error) {
@@ -299,8 +352,8 @@ async function placeOrder(wallet, quantity, asset, category, limit, execution) {
 
         // Execute the contract with the message
         const fee = {
-            amount: [{ denom: "umantra", amount: "5000" }],
-            gas: "200000"
+            amount: [{ denom: "uom", amount: "300000" }],
+            gas: "300000"
         };
 
         // Send the transaction
