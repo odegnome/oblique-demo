@@ -352,8 +352,8 @@ async function placeOrder(wallet, quantity, asset, category, limit, execution) {
 
         // Execute the contract with the message
         const fee = {
-            amount: [{ denom: "uom", amount: "300000" }],
-            gas: "300000"
+            amount: [{ denom: "uom", amount: "500000" }],
+            gas: "500000"
         };
 
         // Send the transaction
