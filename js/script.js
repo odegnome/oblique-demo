@@ -1,10 +1,10 @@
 import { StargateClient } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
-const rpc = "http://localhost:26657"
+const rpc = import.meta.env.VITE_RPC;
 // const rpc = "https://rpc.dukong.mantrachain.io"
-const restUrl = 'http://localhost:1317';  // Default Cosmos REST API port
-const contractAddress = 'mantra14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9st5uxgc'; // Replace with your contract address
+const restUrl = import.meta.env.VITE_REST;  // Default Cosmos REST API port
+const contractAddress = import.meta.env.VITE_CONTRACT; // Replace with your contract address
 
 // Global variables
 let orderData = {
@@ -109,6 +109,9 @@ async function fetchOrderbookData() {
 
 // Initialize event handlers
 document.addEventListener('DOMContentLoaded', function() {
+    // console.log(rpc, "rpc");
+    // console.log(restUrl, "restUrl");
+    // console.log(contractAddress, "contractAddress");
     // Fetch initial orderbook data
     fetchOrderbookData();
 
