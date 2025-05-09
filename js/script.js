@@ -28,6 +28,8 @@ let orderData = {
         "spread": "0.10"
     }
 };
+// Track current wallet address globally to enable periodic balance updates
+let currentWalletAddress = null;
 
 // Function to populate the orderbook
 function populateOrderbook(data) {
@@ -45,7 +47,7 @@ function populateOrderbook(data) {
         row.innerHTML = `
             <td>${parseFloat(bid[0]).toFixed(2)}</td>
             <td>${bid[1]}</td>
-            <td>${(parseInt(bid[2])/10**6).toFixed(2)}</td>
+            <td>${(parseInt(bid[2]) / 10 ** 6).toFixed(2)}</td>
         `;
         bidsBody.appendChild(row);
     });
@@ -56,7 +58,7 @@ function populateOrderbook(data) {
         row.innerHTML = `
             <td>${parseFloat(ask[0]).toFixed(2)}</td>
             <td>${ask[1]}</td>
-            <td>${(parseInt(ask[2])/10**6).toFixed(2)}</td>
+            <td>${(parseInt(ask[2]) / 10 ** 6).toFixed(2)}</td>
         `;
         asksBody.appendChild(row);
     });
@@ -107,6 +109,32 @@ async function fetchOrderbookData() {
     }
 }
 
+// Function to update wallet balance display
+async function updateWalletBalance() {
+    // Only proceed if we have a wallet address to check
+    if (!currentWalletAddress) return;
+
+    const balanceAmount = document.getElementById('balance-amount');
+    if (!balanceAmount) return;
+
+    try {
+        const balances = await fetchBalance(currentWalletAddress);
+        if (balances.length === 0) {
+            balanceAmount.textContent = "0.0";
+        } else {
+            balanceAmount.innerHTML = balances.map(coin => {
+                // Format each balance: convert from micro units and clean up the denom
+                const amount = (Number(coin.amount) / 10 ** 6).toFixed(6);
+                const denom = coin.denom.startsWith('u') ? coin.denom.substring(1).toUpperCase() : coin.denom;
+                return `${amount} ${denom}`;
+            }).join('<br>');
+        }
+    } catch (error) {
+        console.error('Error updating wallet balance:', error);
+        balanceAmount.textContent = "Error fetching balance";
+    }
+}
+
 // Initialize event handlers
 document.addEventListener('DOMContentLoaded', function() {
     // console.log(rpc, "rpc");
@@ -131,9 +159,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 try {
                     const result = await main();
+                    currentWalletAddress = result.address;
+
                     const balances = await fetchBalance(result.address)
                     if (balances.length == 0) {
-                        balanceAmount.textContent = "NA"
+                        balanceAmount.textContent = "0.0"
                     } else {
                         balanceAmount.innerHTML = balances.map(coin => {
                             // Format each balance: convert from micro units and clean up the denom
@@ -145,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultDiv.innerHTML = `
                         <p><strong>Generated Address:</strong> ${result.address}</p>
                         <p><strong>Mnemonic:</strong> ${result.wallet.mnemonic}</p>
-                        <p>Balance information has been logged to the console.</p>
                     `;
                 } catch (error) {
                     resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
@@ -220,6 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Show success message
                 alert(`Order successfully placed! Transaction hash: ${result.transactionHash}`);
+
+                await updateWalletBalance();
 
                 // Reset form
                 document.getElementById('quantity').value = '';
