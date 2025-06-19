@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchOrderbookData();
 
     // Set up periodic polling to refresh the orderbook
-    setInterval(fetchOrderbookData, 5000); // Update every 5 seconds
+    // setInterval(fetchOrderbookData, 5000); // Update every 5 seconds
 
     // Add wallet generation button handler
     const generateWalletButton = document.getElementById('generate-wallet');
